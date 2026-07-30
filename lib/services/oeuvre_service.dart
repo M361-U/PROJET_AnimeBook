@@ -4,12 +4,10 @@ import '../models/oeuvre_model.dart';
 class OeuvreService {
   final Box<Oeuvre> _box = Hive.box<Oeuvre>('oeuvres');
 
-  
   Future<void> ajouterOeuvre(Oeuvre oeuvre) async {
     await _box.add(oeuvre);
   }
 
-  
   List<Oeuvre> getToutesLesOeuvres() {
     return _box.values.toList();
   }
@@ -18,17 +16,14 @@ class OeuvreService {
     return _box.get(key);
   }
 
-  
   Future<void> modifierOeuvre(Oeuvre oeuvre) async {
     await oeuvre.save(); // HiveObject connaît sa propre clé
   }
 
-  
   Future<void> supprimerOeuvre(Oeuvre oeuvre) async {
     await oeuvre.delete();
   }
 
-  
   List<Oeuvre> rechercherParTitre(String texte) {
     if (texte.isEmpty) return getToutesLesOeuvres();
     final texteMinuscule = texte.toLowerCase();
@@ -37,7 +32,6 @@ class OeuvreService {
         .toList();
   }
 
-  
   List<Oeuvre> filtrerParType(String type) {
     return _box.values.where((o) => o.type == type).toList();
   }
@@ -50,7 +44,6 @@ class OeuvreService {
     return _box.values.where((o) => o.statut == statut).toList();
   }
 
- 
   int compterAnimes() {
     return _box.values.where((o) => o.type == 'Anime').length;
   }
@@ -63,4 +56,15 @@ class OeuvreService {
     if (_box.isEmpty) return null;
     return _box.values.last;
   }
+
+  // --- Alias pour le tableau de bord (Personne 4) ---
+  // Ajoutés pour correspondre aux noms prévus dans le cahier des charges
+  // du dashboard. Ils appellent simplement les fonctions déjà existantes
+  // ci-dessus, sans dupliquer la logique.
+
+  int nombreAnimes() => compterAnimes();
+
+  int nombreFilms() => compterFilms();
+
+  Oeuvre? derniereOeuvreAjoutee() => getDerniereOeuvreAjoutee();
 }
