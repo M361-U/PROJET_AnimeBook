@@ -19,6 +19,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _confirmationController = TextEditingController();
 
   bool _chargement = false;
+  bool _obscurePassword = true;
+  bool _obscureConfirmation = true;
+
+  // Palette de couleurs identique au LoginScreen
+  static const Color backgroundColor = Color(0xFF0F111A);
+  static const Color inputBackgroundColor = Color(0xFF1B1D2A);
+  static const Color primaryOrange = Color(0xFFD6432C);
+  static const Color lightText = Colors.white;
+  static const Color mutedText = Color(0xFFA0A5BD);
+  static const Color borderColor = Color(0xFF2C2F45);
 
   @override
   void dispose() {
@@ -46,7 +56,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (erreur != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(erreur), backgroundColor: Colors.redAccent),
+        SnackBar(content: Text(erreur), backgroundColor: primaryOrange),
       );
       return;
     }
@@ -57,42 +67,114 @@ class _RegisterScreenState extends State<RegisterScreen> {
         backgroundColor: Colors.green,
       ),
     );
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
+  }
+
+  // Helper pour styliser les champs de texte et éviter le code répété
+  InputDecoration _buildInputDecoration({
+    required String hintText,
+    Widget? suffixIcon,
+  }) {
+    return InputDecoration(
+      hintText: hintText,
+      hintStyle: TextStyle(color: mutedText.withOpacity(0.6)),
+      filled: true,
+      fillColor: inputBackgroundColor,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      suffixIcon: suffixIcon,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: borderColor),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: primaryOrange, width: 1.5),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Colors.redAccent),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Créer un compte")),
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        backgroundColor: backgroundColor,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: lightText),
+        title: const Text(
+          "Créer un compte",
+          style: TextStyle(color: lightText, fontWeight: FontWeight.bold),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 12),
+                // --- Titre / Sous-titre ---
+                const Text(
+                  "Rejoignez AnimeBook",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: lightText,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                const Text(
+                  "Remplissez les informations pour commencer",
+                  style: TextStyle(color: mutedText, fontSize: 14),
+                ),
+                const SizedBox(height: 28),
+
+                // --- Champ Nom d'utilisateur ---
+                const Text(
+                  "Nom d'utilisateur",
+                  style: TextStyle(
+                    color: lightText,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 8),
                 TextFormField(
                   controller: _nomController,
-                  decoration: const InputDecoration(
-                    labelText: "Nom d'utilisateur",
-                    prefixIcon: Icon(Icons.person_outline),
-                    border: OutlineInputBorder(),
-                  ),
+                  style: const TextStyle(color: lightText),
+                  decoration: _buildInputDecoration(hintText: "ex: Otaku99"),
                   validator: (v) =>
                       (v == null || v.trim().isEmpty) ? "Champ requis" : null,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 18),
+
+                // --- Champ E-mail ---
+                const Text(
+                  "Adresse e-mail",
+                  style: TextStyle(
+                    color: lightText,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 8),
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: "Adresse e-mail",
-                    prefixIcon: Icon(Icons.email_outlined),
-                    border: OutlineInputBorder(),
+                  style: const TextStyle(color: lightText),
+                  decoration: _buildInputDecoration(
+                    hintText: "vous@exemple.com",
                   ),
                   validator: (v) {
                     if (v == null || v.trim().isEmpty) return "Champ requis";
@@ -100,55 +182,130 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 18),
+
+                // --- Champ Mot de passe ---
+                const Text(
+                  "Mot de passe",
+                  style: TextStyle(
+                    color: lightText,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 8),
                 TextFormField(
                   controller: _motDePasseController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: "Mot de passe",
-                    prefixIcon: Icon(Icons.lock_outline),
-                    border: OutlineInputBorder(),
+                  obscureText: _obscurePassword,
+                  style: const TextStyle(color: lightText),
+                  decoration: _buildInputDecoration(
+                    hintText: "••••••••",
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        color: mutedText,
+                      ),
+                      onPressed: () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
+                    ),
                   ),
                   validator: (v) => (v == null || v.length < 6)
                       ? "6 caractères minimum"
                       : null,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 18),
+
+                // --- Champ Confirmation mot de passe ---
+                const Text(
+                  "Confirmation du mot de passe",
+                  style: TextStyle(
+                    color: lightText,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 8),
                 TextFormField(
                   controller: _confirmationController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: "Confirmation du mot de passe",
-                    prefixIcon: Icon(Icons.lock_outline),
-                    border: OutlineInputBorder(),
+                  obscureText: _obscureConfirmation,
+                  style: const TextStyle(color: lightText),
+                  decoration: _buildInputDecoration(
+                    hintText: "••••••••",
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureConfirmation
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        color: mutedText,
+                      ),
+                      onPressed: () => setState(
+                        () => _obscureConfirmation = !_obscureConfirmation,
+                      ),
+                    ),
                   ),
                   validator: (v) => v != _motDePasseController.text
                       ? "Les mots de passe ne correspondent pas"
                       : null,
                 ),
                 const SizedBox(height: 28),
-                FilledButton(
+
+                // --- Bouton S'inscrire ---
+                ElevatedButton(
                   onPressed: _chargement ? null : _sInscrire,
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryOrange,
+                    foregroundColor: lightText,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 2,
                   ),
                   child: _chargement
                       ? const SizedBox(
                           height: 20,
                           width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: lightText,
+                          ),
                         )
-                      : const Text("S'inscrire"),
+                      : const Text(
+                          "S'inscrire",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ),
+                const SizedBox(height: 20),
+
+                // --- Lien Se connecter ---
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Vous avez déjà un compte ? ",
+                      style: TextStyle(color: mutedText, fontSize: 14),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (_) => const LoginScreen()),
+                      ),
+                      child: const Text(
+                        "Se connecter",
+                        style: TextStyle(
+                          color: primaryOrange,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
-                Center(
-                  child: TextButton(
-                    onPressed: () => Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => const LoginScreen()),
-                    ),
-                    child: const Text("Vous avez déjà un compte ? Se connecter"),
-                  ),
-                ),
               ],
             ),
           ),
