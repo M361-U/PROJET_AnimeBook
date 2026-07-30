@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'models/oeuvre_model.dart';
 import 'models/utilisateur_model.dart';
-import 'services/oeuvre_service.dart';
-import 'services/utilisateur_service.dart';
+import 'screens/oeuvre_list_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +13,7 @@ void main() async {
   await Hive.openBox<Utilisateur>('users');
   runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const OeuvreListPage(),
     );
   }
 }
