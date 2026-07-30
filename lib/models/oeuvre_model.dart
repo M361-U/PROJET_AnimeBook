@@ -48,4 +48,7 @@ class Oeuvre extends HiveObject {
     required this.commentaire,
     this.imagePath,
   });
+
+  @HiveField(11)
+  String? idUtilisateur;
 }

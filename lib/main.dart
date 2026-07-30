@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'models/oeuvre_model.dart';
+import 'models/utilisateur_model.dart';
 import 'services/oeuvre_service.dart';
+import 'services/utilisateur_service.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(OeuvreAdapter());
+  Hive.registerAdapter(UtilisateurAdapter());
   await Hive.openBox<Oeuvre>('oeuvres');
-  await Hive.box<Oeuvre>('oeuvres').clear();
+  await Hive.openBox<Utilisateur>('users');
   runApp(const MyApp());
 }
 class MyApp extends StatelessWidget {

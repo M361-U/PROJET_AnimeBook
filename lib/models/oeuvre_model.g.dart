@@ -28,13 +28,13 @@ class OeuvreAdapter extends TypeAdapter<Oeuvre> {
       note: fields[8] as double,
       commentaire: fields[9] as String,
       imagePath: fields[10] as String?,
-    );
+    )..idUtilisateur = fields[11] as String?;
   }
 
   @override
   void write(BinaryWriter writer, Oeuvre obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.titre)
       ..writeByte(1)
@@ -56,7 +56,9 @@ class OeuvreAdapter extends TypeAdapter<Oeuvre> {
       ..writeByte(9)
       ..write(obj.commentaire)
       ..writeByte(10)
-      ..write(obj.imagePath);
+      ..write(obj.imagePath)
+      ..writeByte(11)
+      ..write(obj.idUtilisateur);
   }
 
   @override
