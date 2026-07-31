@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/utilisateur_model.dart';
 import '../services/oeuvre_service.dart';
+import 'oeuvre_form_page.dart';
+import 'catalogue_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final Utilisateur utilisateur;
@@ -83,26 +85,34 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const Spacer(),
               FilledButton.icon(
-                onPressed: () {
-                  // TODO: naviguer vers l'écran d'ajout d'œuvre
-                },
-                icon: const Icon(Icons.add),
-                label: const Text("Ajouter une œuvre"),
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
-              ),
-              const SizedBox(height: 12),
-              OutlinedButton.icon(
-                onPressed: () {
-                  // TODO: naviguer vers l'écran du catalogue
-                },
-                icon: const Icon(Icons.grid_view_rounded),
-                label: const Text("Voir le catalogue"),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
-              ),
+  onPressed: () async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const OeuvreFormPage()),
+    );
+    _chargerStatistiques();
+  },
+  icon: const Icon(Icons.add),
+  label: const Text("Ajouter une œuvre"),
+  style: FilledButton.styleFrom(
+    padding: const EdgeInsets.symmetric(vertical: 14),
+  ),
+),
+const SizedBox(height: 12),
+OutlinedButton.icon(
+  onPressed: () async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const CatalogueScreen()),
+    );
+    _chargerStatistiques();
+  },
+  icon: const Icon(Icons.grid_view_rounded),
+  label: const Text("Voir le catalogue"),
+  style: OutlinedButton.styleFrom(
+    padding: const EdgeInsets.symmetric(vertical: 14),
+  ),
+),
             ],
           ),
         ),
