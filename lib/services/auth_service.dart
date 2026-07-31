@@ -6,6 +6,12 @@ import '../models/utilisateur_model.dart';
 class AuthService {
   static const String boxName = 'users';
 
+  static final AuthService _instance = AuthService._internal();
+
+  factory AuthService() => _instance;
+
+  AuthService._internal();
+
   Box<Utilisateur> get _box => Hive.box<Utilisateur>(boxName);
 
   /// Utilisateur actuellement connecté (null si personne n'est connecté).
