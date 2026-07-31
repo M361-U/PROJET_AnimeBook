@@ -107,6 +107,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
+                                         
                                     )
                                   : null,
                             ),
