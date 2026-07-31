@@ -26,12 +26,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF6C4FE0),
+      backgroundColor: const Color(0xFF0D0F14),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            Icon(Icons.movie_filter_rounded, size: 96, color: Colors.white),
+            Icon(Icons.movie_filter_rounded, size: 96, color: Color(0xFF3B82F6)),
             SizedBox(height: 20),
             Text(
               "AnimeBook",
@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Text(
                 "Votre carnet personnel d'animés et de films",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.white70),
+                style: TextStyle(fontSize: 14, color: Colors.white60),
               ),
             ),
           ],
